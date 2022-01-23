@@ -1,0 +1,4 @@
+<h1>Edit category</h1>
+<p style="color: green"><%= flash[:notice] %></p>
+<%= render :partial => "form", :locals => { :button_label => "Update category", :category => @category }%>
+<%=link_to "back",:back%>
