@@ -34,13 +34,25 @@ describe CategoriesController do
     it { should redirect_to("/categories") }
   end
 
+  describe "GET#edit" do
+    before do
+      @category = Factory(:category)
+      get :edit, :id => @category.id
+    end
+    it { should respond_with(200) }
+    it { should render_template(:edit) }
+    it { should assign_to(:category).with(@category) }
+  end
+  
+
   describe "PUT#update" do
     before do
       @category = Factory(:category)
-      put :update, :id => @category.id, :category => { :name => "xyz", :description => "avd" }
+      put :update, :id => @category.id, :category => { :name => "xyz" }
+      @category.reload
     end
-
-    it { should redirect_to() }
+    it { @category.name.should == "xyz" }
+    it { should redirect_to(category_path) }
   end
 
   describe "DELETE#destroy" do
@@ -50,9 +62,6 @@ describe CategoriesController do
     end
     it { should redirect_to("/categories") }
   end
-  
-  
-  
   
 
 end

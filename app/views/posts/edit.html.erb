@@ -1,0 +1,4 @@
+<h1>Edit post</h1>
+<p style="color: green"><%= flash[:notice] %></p>
+<%= render :partial => "form", :locals => { :button_label => "Update post", :post => @post }%>
+<%=link_to "back",:back%>

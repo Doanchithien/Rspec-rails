@@ -13,7 +13,7 @@ describe Category do
   
   describe "Validations" do
     it { should validate_uniqueness_of(:name) }
-    it { should allow_value("the loai").for(:name) }
+    it { should allow_value("the loai 123").for(:name) }
     it { should ensure_length_of(:name) }
   end
   

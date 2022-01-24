@@ -28,7 +28,7 @@ class CategoriesController < ApplicationController
     def update 
         if @category.update_attributes(params[:category])
             flash[:notice] = "Category was updated!"
-            redirect_to categories_path
+            redirect_to @category
         else
             render :action => "edit"
         end
