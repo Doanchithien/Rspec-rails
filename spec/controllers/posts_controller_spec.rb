@@ -26,11 +26,22 @@ describe PostsController do
       end
     
     describe "POST#create" do
-        before do
-            @post  = Factory.attributes_for(:post)
-            post :create, :post => @post 
+        context "post with valid data" do
+            before do
+                @post  = Factory.attributes_for(:post) 
+                post :create, :post => @post 
+            end
+            it { response.should be_redirect }
         end
-        it { response.should be_redirect }
+
+        context "post with invalid data" do
+            before do
+                @post = Factory.attributes_for(:invalid_post)
+                post :create, :post => @post
+            end
+            it { should render_template(:new) }
+        end
+        
     end
 
     describe "GET#edit" do
@@ -44,13 +55,26 @@ describe PostsController do
     end
 
     describe "PUT#update" do
-        before do
-            @post = Factory(:post)
-            put :update, :id => @post.id, :post => { :title => "change" }
-            @post.reload
+        before { @post = Factory(:post) }
+        
+        context "update with valid data" do
+            before do
+                put :update, :id => @post.id, :post => { :title => "change" }
+                @post.reload
+            end
+            it { @post.title.should == "change"  }
+            it { should redirect_to(post_path) }
         end
-        it { @post.title.should == "change"  }
-        it { should redirect_to(post_path) }
+
+        context "update with invalid data" do
+            before do
+                put :update, :id => @post.id, :post => { :title => nil }
+                @post.reload
+            end
+            it { @post.title.should == "test post" }
+            it { should render_template(:edit) }
+        end
+        
     end
     
     describe "DELETE#destroy" do

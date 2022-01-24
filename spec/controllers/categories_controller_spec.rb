@@ -27,11 +27,23 @@ describe CategoriesController do
   end
 
   describe "POST#create" do
-    before do
-      @category = Factory.attributes_for(:category)
-      post :create, :category => @category
+
+    context "Post category with valid data" do
+      before do
+        @category = Factory.attributes_for(:category)
+        post :create, :category => @category
+      end
+      it { should redirect_to("/categories") }
     end
-    it { should redirect_to("/categories") }
+
+    context "Post category with invalid data" do
+      before do
+        @category = Factory.attributes_for(:invalid_category)
+        post :create, :category => @category
+      end
+      it { should render_template(:new) }
+    end
+    
   end
 
   describe "GET#edit" do
@@ -46,13 +58,26 @@ describe CategoriesController do
   
 
   describe "PUT#update" do
-    before do
-      @category = Factory(:category)
-      put :update, :id => @category.id, :category => { :name => "xyz" }
-      @category.reload
+    before { @category = Factory(:category) }
+
+    context "Update category with valid data" do
+      before do
+        put :update, :id => @category.id, :category => { :name => "xyz" }
+        @category.reload
+      end
+      it { @category.name.should == "xyz" }
+      it { should redirect_to(category_path) }
     end
-    it { @category.name.should == "xyz" }
-    it { should redirect_to(category_path) }
+
+    context "Update category with invalid data" do
+      before do
+        put :update, :id => @category.id, :category => { :name => nil }
+        @category.reload
+      end
+      it { @category.name.should == "test category" }
+      it { should render_template(:edit) }
+    end
+    
   end
 
   describe "DELETE#destroy" do
